@@ -5,7 +5,7 @@ pipeline {
 
         stage('Clone Code') {
             steps {
-                git 'https://github.com/your-username/docker-secure-app.git'
+                git 'https://github.com/sujithkumarr99/secure-app.git'
             }
         }
 
