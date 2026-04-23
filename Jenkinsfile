@@ -24,7 +24,8 @@ pipeline {
         stage('Run Container') {
             steps {
                 bat '''
-                docker run -d -p 5000:5000 --name secure-container secure-app || true
+                bat 'docker rm -f secure-container || exit 0'
+                docker run -d -p 5000:5000 --name secure-container secure-app
                 '''
             }
         }
