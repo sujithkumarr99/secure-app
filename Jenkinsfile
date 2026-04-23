@@ -5,28 +5,24 @@ pipeline {
 
         stage('Clone Code') {
             steps {
+                deleteDir()
                 git branch: 'main', url: 'https://github.com/sujithkumarr99/secure-app.git'
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                bat 'docker build -t secure-app .'
-            }
-        }
-
-        stage('Security Scan (Docker Scout)') {
-            steps {
-                bat 'docker scout quickview secure-app || true'
-            }
-        }
-
-        stage('Run Container') {
+        stage('Build & Deploy') {
             steps {
                 bat '''
-                bat 'docker rm -f secure-container || exit 0'
+                docker rm -f secure-container 2>nul
+                docker build --no-cache -t secure-app .
                 docker run -d -p 5000:5000 --name secure-container secure-app
                 '''
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                bat 'docker scout quickview secure-app'
             }
         }
     }
